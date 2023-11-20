@@ -1,0 +1,10 @@
+library(soilDB)
+library(terra)
+x <- fetchSDA_spatial("CA732", "areasymbol", geom="sapolygon")
+y <- buffer(vect(x), 100)
+z <- fetchSDA_spatial(SDA_spatialQuery(y, "areasymbol", db="SAPOLYGON")[[1]] |> unique(),
+                      "areasymbol", geom="sapolygon")
+plot(z)
+res <- huckster::envelope_to_huc(aggregate(vect(z)), layer = "subbasin")
+plot(res)
+plot(z,add=T)
